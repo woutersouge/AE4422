@@ -1,6 +1,7 @@
 """HI"""
 from single_agent_planner import compute_heuristics
 
+
 class AircraftDistributed(object):
     """Aircraft object to be used in the distributed planner."""
 

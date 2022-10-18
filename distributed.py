@@ -9,6 +9,7 @@ from single_agent_planner import compute_heuristics, a_star, get_sum_of_cost
 from aircraft import AircraftDistributed
 from cbs import detect_collision, detect_collisions
 
+
 class DistributedPlanningSolver(object):
     """A distributed planner"""
 
@@ -25,7 +26,7 @@ class DistributedPlanningSolver(object):
         self.heuristics = []
 
         # T.B.D.
-        
+
     def find_solution(self):
         """
         Finds paths for all agents from start to goal locations. 
@@ -37,13 +38,11 @@ class DistributedPlanningSolver(object):
         start_time = timer.time()
         result = []
         self.CPU_time = timer.time() - start_time
-        
-        
+
         # Create agent objects with AircraftDistributed class
         agentlist = []
         moves = [[] for Null in range(self.num_of_agents)]
         vals = [1 for Null in range(self.num_of_agents)]
-
 
         for i in range(self.num_of_agents):
             heur = compute_heuristics(self.my_map, self.goals[i])
@@ -58,8 +57,6 @@ class DistributedPlanningSolver(object):
                 ten[j]['val'] = val
                 ten[j]['loc'] = loc
                 vals[j] = val
-
-
 
                 moves[j].append(loc)
                 agentlist[j].update_loc(loc)
@@ -77,17 +74,16 @@ class DistributedPlanningSolver(object):
 
             while coll:
                 for k in range(self.num_of_agents):
-                    ten[k]['loc'], ten[k]['val'] = agentlist[k].solve_coll(ten_loc, vals)
-
+                    coll = False
+                    # ten[k]['loc'], ten[k]['val'] = agentlist[k].solve_coll(ten_loc, vals)
 
         result = moves
 
-        
-        
         # Print final output
         print("\n Found a solution! \n")
         print("CPU time (s):    {:.2f}".format(self.CPU_time))
-        print("Sum of costs:    {}".format(get_sum_of_cost(result)))  # Hint: think about how cost is defined in your implementation
+        print("Sum of costs:    {}".format(
+            get_sum_of_cost(result)))  # Hint: think about how cost is defined in your implementation
         print(result)
-        
+
         return result  # Hint: this should be the final result of the distributed planning (visualization is done after planning)
