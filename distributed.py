@@ -54,7 +54,7 @@ class DistributedPlanningSolver(object):
             ten = [{} for _ in range(self.num_of_agents)]
             curr = [{} for _ in range(self.num_of_agents)]
             for j in range(self.num_of_agents):
-                ten[j]['loc'], ten[j]['val'], curr[j]['loc'] = agentlist[j].calc_next()
+                ten[j]['loc'], ten[j]['val'] = agentlist[j].calc_next()
 
             ten_loc = [d['loc'] for d in ten]
 
@@ -66,26 +66,29 @@ class DistributedPlanningSolver(object):
                     break
                 else:
                     coll = False
-            coll = False
+
             while coll:
                 for k in range(self.num_of_agents):
-                    ten[k]['loc'], ten[k]['val'] = agentlist[k].solve_coll(ten)
+                    ten = agentlist[k].solve_coll(ten)
 
                     ten_loc = [d['loc'] for d in ten]
 
                     coll = False
 
-                    for location in [d['loc'] for d in ten]:
+                    for location in ten_loc:
+                        # print(ten_loc.count(location))
                         if ten_loc.count(location) > 1:
                             coll = True
                             break
                         else:
                             coll = False
 
-
             for l in range(self.num_of_agents):
                 moves[l].append(ten[l]['loc'])
                 agentlist[l].update_loc(ten[l]['loc'])
+
+            vals = [d['val'] for d in ten]
+
 
         result = moves
 
