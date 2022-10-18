@@ -34,11 +34,11 @@ class AircraftDistributed(object):
             except KeyError:
                 continue
 
-        return next_move, self.heuristics[next_move]
+        return next_move, self.heuristics[next_move], self.loc
 
     def update_loc(self, loc):
         self.loc = loc
 
-    def solve_coll(self, locations, values):
+    def solve_coll(self, ten):
 
         pass
