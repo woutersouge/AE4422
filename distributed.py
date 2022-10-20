@@ -67,6 +67,13 @@ class DistributedPlanningSolver(object):
                 else:
                     coll = False
 
+                if location in [d['loc'] for d in curr]:
+                    if ten[[d['loc'] for d in curr].index(location)]['loc'] == curr[[d['loc'] for d in ten].index(location)]['loc']:
+                        print([d['loc'] for d in curr].index(location),[d['loc'] for d in ten].index(location))
+                        if [d['loc'] for d in curr].index(location) != [d['loc'] for d in ten].index(location):
+                            coll = True
+                            break
+
             while coll:
                 for k in range(self.num_of_agents):
                     ten = agentlist[k].solve_coll(curr, ten)
@@ -82,6 +89,14 @@ class DistributedPlanningSolver(object):
                             break
                         else:
                             coll = False
+
+                        if location in [d['loc'] for d in curr]:
+                            if ten[[d['loc'] for d in curr].index(location)]['loc'] == \
+                                    curr[[d['loc'] for d in ten].index(location)]['loc']:
+                                print([d['loc'] for d in curr].index(location), [d['loc'] for d in ten].index(location))
+                                if [d['loc'] for d in curr].index(location) != [d['loc'] for d in ten].index(location):
+                                    coll = True
+                                    break
 
 
             for l in range(self.num_of_agents):
