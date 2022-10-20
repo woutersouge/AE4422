@@ -1,4 +1,6 @@
 """HI"""
+import sys
+
 from single_agent_planner import compute_heuristics
 
 
@@ -20,37 +22,66 @@ class AircraftDistributed(object):
         self.id = agent_id
         self.heuristics = heuristics
 
-    def calc_next(self, *collision_locs):
-        if self.loc == self.goal:
-            return self.loc, 0
+    def calc_next(self, curr, collision_locs=None):
+        if collision_locs is None:
+            collision_locs = []
+        # if self.loc == self.goal:
+        #    return self.loc, 0
         #print(collision_locs)
         moves = [(0, -1), (1, 0), (0, 1), (-1, 0), (0, 0)]
         next_move = self.loc
         for move in moves:
             possible_move = (self.loc[0] + move[0], self.loc[1] + move[1])
+            # print(self.my_map)
             try:
-                if (self.heuristics[possible_move] < self.heuristics[next_move]) and not (
+                # print(self.my_map[possible_move[1]][possible_move[0]])
+                if self.my_map[possible_move[0]][possible_move[1]]:
+                    continue
+            except IndexError:
+                continue
+            try:
+                next_locs = collision_locs[:]
+                next_locs.insert(self.id, (-1, -1))
+                prev_locs = [d['loc'] for d in curr]
+                prev_locs[self.id] = (-1, -1)
+                print(possible_move, prev_locs, self.loc, next_locs)
+                if (possible_move in prev_locs) and (self.loc in next_locs):
+                    if prev_locs.index(possible_move) == next_locs.index(self.loc):
+                        continue
+            except KeyError:
+                pass
+
+            adjust = 0
+            try:
+                if next_move in collision_locs:
+                    adjust = 1e3
+                # print(collision_locs, possible_move, self.heuristics[possible_move], self.heuristics[next_move]+adjust)
+
+                if (self.heuristics[possible_move] < self.heuristics[next_move]+adjust) and not (
                         possible_move in collision_locs):
                     next_move = possible_move
+
             except KeyError:
                 continue
 
-        return next_move, self.heuristics[next_move]
+        return next_move, self.heuristics[next_move], self.loc
 
     def update_loc(self, loc):
         self.loc = loc
 
-    def solve_coll(self, ten):
+    def solve_coll(self, curr, ten):
         next_loc = ten[self.id]['loc']
         other_locs = [d['loc'] for d in ten]
-        del other_locs[self.id]
-        print(other_locs)
 
         if next_loc in other_locs:
             indexes = [i for i, x in enumerate(other_locs) if x == next_loc]
+            indexes.remove(self.id)
+            del other_locs[self.id]
+            # print(other_locs, next_loc, self.id)
             for ind in indexes:
-                if ten[ind]['val'] > ten[self.id]['val']:
-                    ten[self.id]['loc'], ten[self.id]['val'] = self.calc_next(other_locs)
+                if ten[ind]['val'] >= ten[self.id]['val']:
+                    ten[self.id]['loc'], ten[self.id]['val'], _ = self.calc_next(curr, other_locs)
+                    # print('Agent '+str(self.id)+" location updated to: "+str(ten[self.id]['loc']))
                     break
 
         return ten
