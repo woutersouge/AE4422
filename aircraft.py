@@ -75,20 +75,19 @@ class AircraftDistributed(object):
         other_locs = [d['loc'] for d in ten]
         # print(curr, next_loc, other_locs, curr[self.id]['loc'], self.id)
         if (next_loc in [d['loc'] for d in curr]) and (curr[self.id]['loc'] in [d['loc'] for d in ten]):
-            print([d['loc'] for d in ten].index(curr[self.id]['loc']), self.id)
-            ten[self.id]['loc'], ten[self.id]['val'], _ = self.calc_next(curr, other_locs)
-            return ten
+            if [d['loc'] for d in ten].index(curr[self.id]['loc']) != self.id:
+                ten[self.id]['loc'], ten[self.id]['val'], _ = self.calc_next(curr, other_locs)
+                return ten
 
         if next_loc in other_locs:
             indexes = [i for i, x in enumerate(other_locs) if x == next_loc]
             indexes.remove(self.id)
             del other_locs[self.id]
-            # print(other_locs, next_loc, self.id)
-            for ind in indexes:
-                if ten[ind]['val'] >= ten[self.id]['val']:
-                    ten[self.id]['loc'], ten[self.id]['val'], _ = self.calc_next(curr, other_locs)
-                    # print('Agent '+str(self.id)+" location updated to: "+str(ten[self.id]['loc']))
-                    return ten
+            # print(other_locs, next_loc, indexes, self.id)
+            if all(v >= ten[self.id]['val'] for v in [ten[i]['val'] for i in indexes]):
+                ten[self.id]['loc'], ten[self.id]['val'], _ = self.calc_next(curr, other_locs)
+                # print('Agent '+str(self.id)+" location updated to: "+str(ten[self.id]['loc']))
+                return ten
         # print(next_loc, [d['loc'] for d in curr], curr[self.id]['loc'], [d['loc'] for d in ten])
 
         return ten
