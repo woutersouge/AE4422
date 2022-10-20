@@ -27,7 +27,7 @@ class AircraftDistributed(object):
             collision_locs = []
         # if self.loc == self.goal:
         #    return self.loc, 0
-        #print(collision_locs)
+        # print(collision_locs)
         moves = [(0, -1), (1, 0), (0, 1), (-1, 0), (0, 0)]
         next_move = self.loc
         for move in moves:
@@ -44,9 +44,10 @@ class AircraftDistributed(object):
                 next_locs.insert(self.id, (-1, -1))
                 prev_locs = [d['loc'] for d in curr]
                 prev_locs[self.id] = (-1, -1)
-                print(possible_move, prev_locs, self.loc, next_locs)
+                # print(possible_move, prev_locs, self.loc, next_locs)
                 if (possible_move in prev_locs) and (self.loc in next_locs):
                     if prev_locs.index(possible_move) == next_locs.index(self.loc):
+                        # print('skipped')
                         continue
             except KeyError:
                 pass
@@ -57,7 +58,7 @@ class AircraftDistributed(object):
                     adjust = 1e3
                 # print(collision_locs, possible_move, self.heuristics[possible_move], self.heuristics[next_move]+adjust)
 
-                if (self.heuristics[possible_move] < self.heuristics[next_move]+adjust) and not (
+                if (self.heuristics[possible_move] < self.heuristics[next_move] + adjust) and not (
                         possible_move in collision_locs):
                     next_move = possible_move
 
@@ -72,6 +73,11 @@ class AircraftDistributed(object):
     def solve_coll(self, curr, ten):
         next_loc = ten[self.id]['loc']
         other_locs = [d['loc'] for d in ten]
+        # print(curr, next_loc, other_locs, curr[self.id]['loc'], self.id)
+        if (next_loc in [d['loc'] for d in curr]) and (curr[self.id]['loc'] in [d['loc'] for d in ten]):
+            print([d['loc'] for d in ten].index(curr[self.id]['loc']), self.id)
+            ten[self.id]['loc'], ten[self.id]['val'], _ = self.calc_next(curr, other_locs)
+            return ten
 
         if next_loc in other_locs:
             indexes = [i for i, x in enumerate(other_locs) if x == next_loc]
@@ -82,6 +88,7 @@ class AircraftDistributed(object):
                 if ten[ind]['val'] >= ten[self.id]['val']:
                     ten[self.id]['loc'], ten[self.id]['val'], _ = self.calc_next(curr, other_locs)
                     # print('Agent '+str(self.id)+" location updated to: "+str(ten[self.id]['loc']))
-                    break
+                    return ten
+        # print(next_loc, [d['loc'] for d in curr], curr[self.id]['loc'], [d['loc'] for d in ten])
 
         return ten
