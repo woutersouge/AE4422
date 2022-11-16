@@ -27,7 +27,7 @@ class PrioritizedPlanningSolver(object):
         """ Finds paths for all agents from their start locations to their goal locations."""
 
         start_time = timer.time()
-        timeout = timer.time() + 1
+        # timeout = timer.time() + 1
         longest_path = 50
         result = []
         constraints = []
@@ -76,11 +76,11 @@ class PrioritizedPlanningSolver(object):
             ##############################
 
         self.CPU_time = timer.time() - start_time
-        if  timer.time() > timeout:
-            print(start_time)
-            print(timer.time())
-            print('No result')
-            return None, self.CPU_time
+        # if  timer.time() > timeout:
+        #     print(start_time)
+        #     print(timer.time())
+        #     print('No result')
+        #     return None, self.CPU_time
              
       
 
