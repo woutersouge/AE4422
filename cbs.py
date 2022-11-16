@@ -119,6 +119,7 @@ class CBSSolver(object):
         """
 
         self.start_time = timer.time()
+        CPU_time = timer.time() - self.start_time
 
         # Generate the root node
         # constraints   - list of constraints
@@ -160,7 +161,7 @@ class CBSSolver(object):
             curr = self.pop_node()
             # print(curr)
             if not curr['collisions']:
-                return curr['paths']
+                return curr['paths'], self.CPU_time
 
             constraints2 = standard_splitting(curr['collisions'][0])
             # print(constraints2)

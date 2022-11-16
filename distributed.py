@@ -119,4 +119,4 @@ class DistributedPlanningSolver(object):
             get_sum_of_cost(result)))  # Hint: think about how cost is defined in your implementation
         print(result)
 
-        return result  # Hint: this should be the final result of the distributed planning (visualization is done after planning)
+        return result, self.CPU_time # Hint: this should be the final result of the distributed planning (visualization is done after planning)

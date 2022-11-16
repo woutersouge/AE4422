@@ -123,7 +123,7 @@ if __name__ == '__main__':
     # Hint: Command line options can be added in Spyder by pressing CTRL + F6 > Command line options. 
     # In PyCharm, they can be added as parameters in the configuration.
 
-    result_file = open("results.csv", "w", buffering=1)
+    result_file = open("results.csv", "a", buffering=1)
 
     for file in sorted(glob.glob(args.instance)):
 
@@ -134,24 +134,24 @@ if __name__ == '__main__':
         if args.solver == "CBS":
             print("***Run CBS***")
             cbs = CBSSolver(my_map, starts, goals)
-            paths = cbs.find_solution(args.disjoint)
+            paths, CPU = cbs.find_solution(args.disjoint)
         elif args.solver == "Independent":
             print("***Run Independent***")
             solver = IndependentSolver(my_map, starts, goals)
-            paths = solver.find_solution()
+            paths, CPU = solver.find_solution()
         elif args.solver == "Prioritized":
             print("***Run Prioritized***")
             solver = PrioritizedPlanningSolver(my_map, starts, goals)
-            paths = solver.find_solution()
+            paths, CPU = solver.find_solution()
         elif args.solver == "Distributed":  # Wrapper of distributed planning solver class
             print("***Run Distributed Planning***")
             solver = DistributedPlanningSolver(my_map, starts, goals) #!!!TODO: add your own distributed planning implementation here.
-            paths = solver.find_solution()
+            paths, CPU = solver.find_solution()
         else: 
             raise RuntimeError("Unknown solver!")
 
         cost = get_sum_of_cost(paths)
-        result_file.write("{},{}\n".format(file, cost))
+        result_file.write("{}, {}, {}, {}\n".format(file, cost, CPU, args.solver))
 
 
         if not args.batch:
@@ -160,3 +160,4 @@ if __name__ == '__main__':
             # animation.save("output.mp4", 1.0) # install ffmpeg package to use this option
             animation.show()
     result_file.close()
+
