@@ -1,6 +1,6 @@
 import random
 
-Agents = 20
+Agents = 5
 Num_Layouts_Per = 10
 
 layout1 = ["9 22\n",

@@ -123,7 +123,7 @@ def compare_nodes(n1, n2):
     return n1['g_val'] + n1['h_val'] < n2['g_val'] + n2['h_val']
 
 
-def a_star(my_map, start_loc, goal_loc, h_values, agent, constraints): #, last_timestep):
+def a_star(my_map, start_loc, goal_loc, h_values, agent, constraints, last_timestep):
     """ my_map      - binary obstacle map
         start_loc   - start position
         goal_loc    - goal position
@@ -161,8 +161,8 @@ def a_star(my_map, start_loc, goal_loc, h_values, agent, constraints): #, last_t
             # print(get_path(curr),constraint_table)
             return get_path(curr)
         # print(curr['t_step'])
-        # if curr['t_step'] > last_timestep:
-        #    return None
+        if curr['t_step'] > last_timestep:
+           return None
 
         for dir in range(5):
             child_loc = move(curr['loc'], dir)
