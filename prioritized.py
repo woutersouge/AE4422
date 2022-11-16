@@ -27,12 +27,10 @@ class PrioritizedPlanningSolver(object):
         """ Finds paths for all agents from their start locations to their goal locations."""
 
         start_time = timer.time()
+        timeout = timer.time() + 5
         longest_path = 50
         result = []
         constraints = []
-        # constraints.append({'agent':0,'loc': [(1,5)],'t_step': 4})
-        # constraints.append({'agent':0,'loc': [(1,5)],'t_step': 10})
-        # constraints.append({'agent': 1,'loc': [(1,2), (1,3)],'t_step': 1})
 
         for i in range(self.num_of_agents):  # Find path for each agent
             path = a_star(self.my_map, self.starts[i], self.goals[i], self.heuristics[i],
@@ -73,17 +71,17 @@ class PrioritizedPlanningSolver(object):
                         constraints.append({'agent': k, 'loc': [con_loc, con_loc2], 't_step': j+1})
                         # print('1', k, con_loc, j + 1)
                         # print('2', k, con_loc2, j + 1)
-                        print('test' , k, [con_loc, con_loc2], j+1)
-                        
-                        
-                        # constraints.append({'agent': k, 'loc': [(con_loc[0] + 1, con_loc[0]), con_loc], 't_step': j + 1})
-                        # constraints.append({'agent': k, 'loc': [(con_loc[0] - 1, con_loc[0]), con_loc], 't_step': j + 1})
-                        # constraints.append({'agent': k, 'loc': [(con_loc[0], con_loc[0] + 1), con_loc], 't_step': j + 1})
-                        # constraints.append({'agent': k, 'loc': [(con_loc[0], con_loc[0] - 1), con_loc], 't_step': j + 1})
+                        print('test' , k, [con_loc, con_loc2], j+1) 
 
             ##############################
 
         self.CPU_time = timer.time() - start_time
+        if  timer.time() > timeout:
+            print(start_time)
+            print('No result')
+            return 10000, self.CPU_time
+             
+      
 
         print("\n Found a solution! \n")
         print("CPU time (s):    {:.2f}".format(self.CPU_time))
