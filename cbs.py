@@ -14,10 +14,10 @@ def detect_collision(path1, path2):
     #           You should use "get_location(path, t)" to get the location of a robot at time t.
     for i in range(max(len(path1), len(path2))):
         if get_location(path1, i) == get_location(path2, i):
-            return get_location(path1, i), i + 1
+            return get_location(path1, i), i
         if (get_location(path1, i) == get_location(path2, i + 1)) & (
                 get_location(path1, i + 1) == get_location(path2, i)):
-            return (get_location(path1, i), get_location(path2, i)), i + 1
+            return (get_location(path1, i), get_location(path1, i + 1)), i + 1
 
     return None, None
 
@@ -50,14 +50,18 @@ def standard_splitting(collision):
     #                          specified timestep, and the second constraint prevents the second agent to traverse the
     #                          specified edge at the specified timestep
     constraints = list()
-    if len(collision['loc']) == 1:
+    try:
+
+        # print(constraints[-1]['loc'])
+        if len(collision['loc'][0][0]) == 2:
+            constraints.append({'agent': collision['a1'], 'loc': collision['loc'], 't_step': collision['t_step']})
+            constraints.append({'agent': collision['a2'], 'loc': [(collision['loc'][0][1], collision['loc'][0][0])],
+                                't_step': collision['t_step']})
+            # print(constraints[-1]['loc'])
+
+    except TypeError:
         constraints.append({'agent': collision['a1'], 'loc': collision['loc'], 't_step': collision['t_step']})
         constraints.append({'agent': collision['a2'], 'loc': collision['loc'], 't_step': collision['t_step']})
-        # print(constraints[-1]['loc'])
-    elif len(collision['loc']) == 2:
-        constraints.append({'agent': collision['a1'], 'loc': collision['loc'], 't_step': collision['t_step']+1})
-        constraints.append({'agent': collision['a2'], 'loc': [collision['loc'][1], collision['loc'][0]], 't_step': collision['t_step']+2})
-        # print(constraints[-1]['loc'])
 
     return constraints
 
@@ -159,17 +163,17 @@ class CBSSolver(object):
         #           Ensure to create a copy of any objects that your child nodes might inherit
         while len(self.open_list) > 0:
             curr = self.pop_node()
-            # print(curr)
+            #print(curr)
             if not curr['collisions']:
                 return curr['paths'], self.CPU_time
 
             constraints2 = standard_splitting(curr['collisions'][0])
             # print(constraints2)
             for constraint2 in constraints2:
-                conn = curr['constraints']
+                conn = curr['constraints'][:]
                 conn.append(constraint2)
-                # print(conn)
-                child2 = {'cost': 0, 'constraints': conn, 'paths': curr['paths'], 'collisions': []}
+                # print(curr['paths'])
+                child2 = {'cost': 0, 'constraints': conn, 'paths': curr['paths'][:], 'collisions': []}
                 # print(child2['constraints'])
                 agent = child2['constraints'][-1]['agent']
                 # print(agent)
@@ -177,10 +181,11 @@ class CBSSolver(object):
                               agent, conn)
 
                 if path:
-                    child2['paths'][agent] = path
+                    child2['paths'][agent] = path[:]
+
                     child2['collisions'] = detect_collisions(child2['paths'])
                     child2['cost'] = get_sum_of_cost(child2['paths'])
-                    # print(child2['collisions'])
+                    # print(child2)
                     # print(child2)
                     self.push_node(child2)
 

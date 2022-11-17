@@ -64,7 +64,7 @@ def build_constraint_table(constraints, agent, goal_loc):
                 if constraint['t_step'] > max_t_step:
                     max_t_step = constraint['t_step']
             constraint_table.setdefault(constraint['t_step'], []).append(constraint['loc'])
-    # print(constraint_table)
+    #print(agent, constraint_table)
     return constraint_table, max_t_step
 
 
@@ -98,12 +98,16 @@ def is_constrained(curr_loc, next_loc, next_time, constraint_table):
 
         for entry in constraint_table[next_time]:
             # print(next_time, constraint_table[next_time], next_loc, curr_loc, entry, len(entry))
-            # print(len([entry[0][0]]))
-            if len([entry[0][0]]) == 1:
+
+            try:
+                if len(entry[0][0]) == 2:
+
+                    if (entry[0][0] == curr_loc) & (entry[0][1] == next_loc):
+                        return True
+            except TypeError:
+                #print(curr_loc, next_loc, entry[0])
                 if entry[0] == next_loc:
-                    return True
-            if len([entry[0][0]]) == 2:
-                if (entry[0][0] == curr_loc) & (entry[0][1] == next_loc):
+                    #print("rejected")
                     return True
     except KeyError:
         return False
@@ -123,14 +127,15 @@ def compare_nodes(n1, n2):
     return n1['g_val'] + n1['h_val'] < n2['g_val'] + n2['h_val']
 
 
-def a_star(my_map, start_loc, goal_loc, h_values, agent, constraints, last_timestep):
+def a_star(my_map, start_loc, goal_loc, h_values, agent, constraints):
     """ my_map      - binary obstacle map
         start_loc   - start position
         goal_loc    - goal position
         agent       - the agent that is being re-planned
         constraints - constraints defining where robot should or cannot go at each timestep
     """
-
+    constraint_table = {}
+    #print(constraint_table)
     ##############################
     # Task 1.1: Extend the A* search to search in the space-time domain
     #           rather than space domain, only.
@@ -146,7 +151,7 @@ def a_star(my_map, start_loc, goal_loc, h_values, agent, constraints, last_times
     root = {'loc': start_loc, 'g_val': 0, 'h_val': h_value, 'parent': None, 't_step': 0}
     push_node(open_list, root)
     closed_list[((root['loc']), root['t_step'])] = root
-
+    #print(agent)
     while len(open_list) > 0:
         curr = pop_node(open_list)
         #############################
@@ -159,6 +164,7 @@ def a_star(my_map, start_loc, goal_loc, h_values, agent, constraints, last_times
             # if curr['t_step'] > earliest_goal_timestep:
             #    return None
             # print(get_path(curr),constraint_table)
+            #print(curr, get_path(curr))
             return get_path(curr)
         # print(curr['t_step'])
         if curr['t_step'] > last_timestep:
@@ -174,11 +180,10 @@ def a_star(my_map, start_loc, goal_loc, h_values, agent, constraints, last_times
             if child_loc[0] < 0 or child_loc[1] < 0:
                 continue
 
-
-            child = {'loc': child_loc,
+            child = {'loc': child_loc[:],
                      'g_val': curr['g_val'] + 1,
                      'h_val': h_values[child_loc],
-                     'parent': curr,
+                     'parent': curr.copy(),
                      't_step': curr['t_step'] + 1}
 
             if is_constrained(curr['loc'], child['loc'], child['t_step'], constraint_table):
