@@ -167,8 +167,8 @@ def a_star(my_map, start_loc, goal_loc, h_values, agent, constraints):
             #print(curr, get_path(curr))
             return get_path(curr)
         # print(curr['t_step'])
-        if curr['t_step'] > last_timestep:
-           return None
+        # if curr['t_step'] > last_timestep:
+        #    return None
 
         for dir in range(5):
             child_loc = move(curr['loc'], dir)
