@@ -30,7 +30,7 @@ class DistributedPlanningSolver(object):
     def find_solution(self):
         """
         Finds paths for all agents from start to goal locations. 
-        
+
         Returns:
             result (list): with a path [(s,t), .....] for each agent.
         """
@@ -38,6 +38,8 @@ class DistributedPlanningSolver(object):
         start_time = timer.time()
         result = []
         self.CPU_time = timer.time() - start_time
+
+        look_steps = 2  # <------------------------------------------------------------ CHANGE LOOK FORWARD STEPS HERE
 
         # Create agent objects with AircraftDistributed class
         agentlist = []
@@ -54,7 +56,8 @@ class DistributedPlanningSolver(object):
             ten = [{} for _ in range(self.num_of_agents)]
             curr = [{} for _ in range(self.num_of_agents)]
             for j in range(self.num_of_agents):
-                ten[j]['loc'], ten[j]['val'], curr[j]['loc'] = agentlist[j].calc_next(curr)
+                print(j)
+                ten[j]['loc'], ten[j]['val'], curr[j]['loc'] = agentlist[j].calc_next(curr, look_steps)
 
             ten_loc = [d['loc'] for d in ten]
 
@@ -68,7 +71,8 @@ class DistributedPlanningSolver(object):
                     coll = False
 
                 if location in [d['loc'] for d in curr]:
-                    if ten[[d['loc'] for d in curr].index(location)]['loc'] == curr[[d['loc'] for d in ten].index(location)]['loc']:
+                    if ten[[d['loc'] for d in curr].index(location)]['loc'] == \
+                            curr[[d['loc'] for d in ten].index(location)]['loc']:
                         # print([d['loc'] for d in curr].index(location),[d['loc'] for d in ten].index(location))
                         if [d['loc'] for d in curr].index(location) != [d['loc'] for d in ten].index(location):
                             coll = True
@@ -76,7 +80,7 @@ class DistributedPlanningSolver(object):
 
             while coll:
                 for k in range(self.num_of_agents):
-                    ten = agentlist[k].solve_coll(curr, ten)
+                    ten = agentlist[k].solve_coll(curr, ten, look_steps)
 
                     ten_loc = [d['loc'] for d in ten]
 
@@ -95,20 +99,18 @@ class DistributedPlanningSolver(object):
                                     curr[[d['loc'] for d in ten].index(location)]['loc']:
 
                                 if [d['loc'] for d in curr].index(location) != [d['loc'] for d in ten].index(location):
-                                    print([d['loc'] for d in curr].index(location),
-                                          [d['loc'] for d in ten].index(location))
+                                    # print([d['loc'] for d in curr].index(location),
+                                    #      [d['loc'] for d in ten].index(location))
                                     coll = True
                                     break
                     if not coll:
                         break
-
 
             for l in range(self.num_of_agents):
                 moves[l].append(ten[l]['loc'])
                 agentlist[l].update_loc(ten[l]['loc'])
 
             vals = [d['val'] for d in ten]
-
 
         result = moves
 
@@ -119,4 +121,4 @@ class DistributedPlanningSolver(object):
             get_sum_of_cost(result)))  # Hint: think about how cost is defined in your implementation
         print(result)
 
-        return result, self.CPU_time # Hint: this should be the final result of the distributed planning (visualization is done after planning)
+        return result, self.CPU_time  # Hint: this should be the final result of the distributed planning (visualization is done after planning)
