@@ -119,6 +119,8 @@ def forward_look(self, loc):
     l = []
     for move in moves:
         try:
+            if self.my_map[move[0]][move[1]]:
+                continue
             new = (loc[0] + move[0], loc[1] + move[1])
             d.append(self.heuristics[new])
             l.append(new)
