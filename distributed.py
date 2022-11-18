@@ -9,11 +9,6 @@ from single_agent_planner import compute_heuristics, a_star, get_sum_of_cost
 from aircraft import AircraftDistributed
 
 from cbs import detect_collision, detect_collisions
-import signal
-
-#Sets an alarm in 10 seconds
-#If uncaught will terminate your process. This is for testing only.
-signal.alarm(120)
 
 
 class DistributedPlanningSolver(object):
@@ -45,7 +40,7 @@ class DistributedPlanningSolver(object):
         result = []
         self.CPU_time = timer.time() - start_time
 
-        look_steps = 0  # <------------------------------------------------------------ CHANGE LOOK FORWARD STEPS HERE
+        look_steps = 4  # <------------------------------------------------------------ CHANGE LOOK FORWARD STEPS HERE
 
         # Create agent objects with AircraftDistributed class
         agentlist = []
