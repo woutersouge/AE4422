@@ -44,7 +44,7 @@ class DistributedPlanningSolver(object):
         result = []
         self.CPU_time = timer.time() - start_time
 
-        look_steps = 1  # <------------------------------------------------------------ CHANGE LOOK FORWARD STEPS HERE
+        look_steps = 0  # <------------------------------------------------------------ CHANGE LOOK FORWARD STEPS HERE
 
         # Create agent objects with AircraftDistributed class
         agentlist = []
@@ -61,7 +61,7 @@ class DistributedPlanningSolver(object):
             ten = [{} for _ in range(self.num_of_agents)]
             curr = [{} for _ in range(self.num_of_agents)]
             for j in range(self.num_of_agents):
-                print(j)
+                # print(j)
                 ten[j]['loc'], ten[j]['val'], curr[j]['loc'] = agentlist[j].calc_next(curr, look_steps)
 
             ten_loc = [d['loc'] for d in ten]
