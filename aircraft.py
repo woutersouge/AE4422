@@ -3,12 +3,13 @@ import sys
 
 from single_agent_planner import compute_heuristics
 import numpy as np
+import random
 
 
 class AircraftDistributed(object):
     """Aircraft object to be used in the distributed planner."""
 
-    def __init__(self, my_map, start, goal, heuristics, agent_id):
+    def __init__(self, my_map, start, goal, heuristics, agent_id, prio):
         """
         my_map   - list of lists specifying obstacle positions
         starts      - (x1, y1) start location
@@ -22,6 +23,7 @@ class AircraftDistributed(object):
         self.goal = goal
         self.id = agent_id
         self.heuristics = heuristics
+        self.priority = prio
 
     def calc_next(self, curr, look_steps, collision_locs=None):
         if collision_locs is None:
@@ -56,11 +58,16 @@ class AircraftDistributed(object):
                 if next_move in collision_locs:
                     adjust = 1e3
                 forward_value = forward(self, possible_move, look_steps)
-                print(self.heuristics[possible_move], forward_value,self.heuristics[next_move], old_forward)
+                #print(self.heuristics[possible_move], forward_value,self.heuristics[next_move], old_forward)
                 if (self.heuristics[possible_move] + forward_value < self.heuristics[next_move] + old_forward + adjust) and not (
                         possible_move in collision_locs):
                     next_move = possible_move
                     old_forward = forward_value
+                elif (self.heuristics[possible_move] + forward_value == self.heuristics[next_move] + old_forward + adjust) and not (
+                        possible_move in collision_locs):
+                    if bool(random.getrandbits(1)):
+                        next_move = possible_move
+                        old_forward = forward_value
 
 
             except KeyError:
@@ -85,7 +92,13 @@ class AircraftDistributed(object):
             del other_locs[self.id]
             if all(v >= ten[self.id]['val'] for v in [ten[i]['val'] for i in indexes]):
                 ten[self.id]['loc'], ten[self.id]['val'], _ = self.calc_next(curr, look_steps, other_locs)
+                #self.priority = True
                 return ten
+            elif self.priority:
+                ten[self.id]['loc'], ten[self.id]['val'], _ = self.calc_next(curr, look_steps, other_locs)
+                self.priority = False
+                return ten
+
 
         return ten
 
@@ -106,6 +119,8 @@ def forward_look(self, loc):
     l = []
     for move in moves:
         try:
+            if self.my_map[move[0]][move[1]]:
+                continue
             new = (loc[0] + move[0], loc[1] + move[1])
             d.append(self.heuristics[new])
             l.append(new)
