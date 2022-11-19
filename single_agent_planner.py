@@ -1,5 +1,6 @@
 import heapq
-
+import time
+import time as timer
 
 def move(loc, dir):
     directions = [(0, -1), (1, 0), (0, 1), (-1, 0), (0, 0)]
@@ -8,6 +9,8 @@ def move(loc, dir):
 
 def get_sum_of_cost(paths):
     rst = 0
+    if paths is None:
+        return None
     for path in paths:
         rst += len(path) - 1
     return rst
@@ -139,7 +142,7 @@ def a_star(my_map, start_loc, goal_loc, h_values, agent, constraints):
     ##############################
     # Task 1.1: Extend the A* search to search in the space-time domain
     #           rather than space domain, only.
-    # print(h_values)
+    start_time = time.time()
     # print(constraints, type(agent))
     constraint_table, earliest_goal_timestep = build_constraint_table(constraints, agent, goal_loc)
     # print(earliest_goal_timestep)
@@ -155,7 +158,9 @@ def a_star(my_map, start_loc, goal_loc, h_values, agent, constraints):
     while len(open_list) > 0:
         curr = pop_node(open_list)
         #############################
-        # print(curr)
+        time_opp = timer.time()-start_time
+        if time_opp > 2:
+            return None
         # Task 1.4: Adjust the goal test condition to handle goal constraints
         # print(curr['t_step'])
         # print(earliest_goal_timestep)

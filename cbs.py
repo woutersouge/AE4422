@@ -89,6 +89,7 @@ class CBSSolver(object):
         goals       - [(x1, y1), (x2, y2), ...] list of goal locations
         """
 
+        self.start_time = 0
         self.my_map = my_map
         self.starts = starts
         self.goals = goals
@@ -171,6 +172,8 @@ class CBSSolver(object):
             constraints2 = standard_splitting(curr['collisions'][0])
             # print(constraints2)
             for constraint2 in constraints2:
+                self.CPU_time = timer.time() - self.start_time
+                print(self.CPU_time)
                 conn = curr['constraints'][:]
                 conn.append(constraint2)
                 # print(curr['paths'])
@@ -180,6 +183,8 @@ class CBSSolver(object):
                 # print(agent)
                 path = a_star(self.my_map, self.starts[agent], self.goals[agent], self.heuristics[agent],
                               agent, conn)
+                if path is None:
+                    break
 
                 if path:
                     child2['paths'][agent] = path[:]
@@ -197,4 +202,4 @@ class CBSSolver(object):
         # print("Sum of costs:    {}".format(get_sum_of_cost(node['paths'])))
         print("Expanded nodes:  {}".format(self.num_of_expanded))
         print("Generated nodes: {}".format(self.num_of_generated))
-        return 'No solutions'
+        return None, self.CPU_time

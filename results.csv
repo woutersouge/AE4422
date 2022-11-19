@@ -60,3 +60,6 @@ layouts/layout1/layout1_5agents_7.txt, 70, 1.005829095840454, CBS
 layouts/layout1/layout1_5agents_7.txt, 70, 0.000743865966796875, CBS
 layouts/layout1/layout1_5agents_7.txt, 70, 0.0034987926483154297, Prioritized
 layouts/layout3/layout3_8agents_1.txt, 122, 0, Prioritized
+.\layouts\layout1\layout1_5agents_1.txt, 58, 0.001888275146484375, CBS
+.\layouts\layout1\layout1_5agents_8.txt, None, 2.1830599308013916, CBS
+.\layouts\layout1\layout1_5agents_6.txt, None, 0.0013391971588134766, Prioritized
