@@ -40,7 +40,7 @@ class DistributedPlanningSolver(object):
         result = []
         self.CPU_time = timer.time() - start_time
 
-        look_steps = 4  # <------------------------------------------------------------ CHANGE LOOK FORWARD STEPS HERE
+        look_steps = 7  # <------------------------------------------------------------ CHANGE LOOK FORWARD STEPS HERE
 
         # Create agent objects with AircraftDistributed class
         agentlist = []
@@ -53,6 +53,7 @@ class DistributedPlanningSolver(object):
             agentlist.append(newAgent)
             moves[i].append(self.starts[i])
 
+        number_moves =[]
         while not all(item == 0 for item in vals):
             ten = [{} for _ in range(self.num_of_agents)]
             curr = [{} for _ in range(self.num_of_agents)]
@@ -60,6 +61,12 @@ class DistributedPlanningSolver(object):
                 #print(j)
                 ten[j]['loc'], ten[j]['val'], curr[j]['loc'] = agentlist[j].calc_next(curr, look_steps)
             places = [d['loc'] for d in curr]
+            print(len(number_moves))
+            number_moves.append(places)
+            
+            if len(number_moves) > 200:
+                return moves, 1000    
+
             print_mapf_instance(self.my_map, places, self.goals)
             ten_loc = [d['loc'] for d in ten]
 
@@ -83,7 +90,6 @@ class DistributedPlanningSolver(object):
             while coll:
                 for k in range(self.num_of_agents):
                     ten = agentlist[k].solve_coll(curr, ten, look_steps)
-
                     ten_loc = [d['loc'] for d in ten]
 
                     coll = False
@@ -123,7 +129,7 @@ class DistributedPlanningSolver(object):
             get_sum_of_cost(result)))  # Hint: think about how cost is defined in your implementation
         print(result)
 
-        return result, self.CPU_time  # Hint: this should be the final result of the distributed planning (visualization is done after planning)
+        return result, self.CPU_time, look_steps  # Hint: this should be the final result of the distributed planning (visualization is done after planning)
 
 
 def print_mapf_instance(my_map, starts, goals):
