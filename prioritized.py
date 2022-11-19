@@ -1,5 +1,8 @@
 import time as timer
 from single_agent_planner import compute_heuristics, a_star, get_sum_of_cost
+import multiprocessing
+import time
+
 
 
 class PrioritizedPlanningSolver(object):
@@ -27,7 +30,7 @@ class PrioritizedPlanningSolver(object):
         """ Finds paths for all agents from their start locations to their goal locations."""
 
         start_time = timer.time()
-        # timeout = timer.time() + 1
+        timeout = timer.time() + 0.001
         longest_path = 50
         result = []
         constraints = []

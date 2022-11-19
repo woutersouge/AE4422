@@ -40,3 +40,23 @@ layouts/layout3/layout3_8agents_9.txt, 160, 1.1920928955078125e-06, Distributed,
 layouts/layout3/layout3_8agents_1.txt, 8000, Not Solvable, Distributed, 0
 layouts/layout3/layout3_8agents_1.txt, 8000, Not Solvable, Distributed, 0
 layouts/layout3/layout3_8agents_1.txt, 8000, Not Solvable, Distributed, 0
+layouts/layout1/layout1_5agents_7.txt, 70, 0.0016739368438720703, CBS
+layouts/layout1/layout1_5agents_7.txt, 70, 0.0016989707946777344, CBS
+layouts/layout1/layout1_5agents_7.txt, 70, 0.0007500648498535156, CBS
+layouts/layout1/layout1_5agents_7.txt, 70, 0.0007460117340087891, CBS
+layouts/layout1/layout1_5agents_7.txt, 70, 0.0007328987121582031, CBS
+layouts/layout1/layout1_5agents_7.txt, 70, 0.0007319450378417969, CBS
+layouts/layout1/layout1_5agents_7.txt, 70, 0.0007338523864746094, CBS
+layouts/layout1/layout1_5agents_7.txt, 70, 0.0007350444793701172, CBS
+layouts/layout1/layout1_5agents_8.txt, 51, 0.0005860328674316406, CBS
+layouts/layout1/layout1_5agents_7.txt, 70, 0.0007269382476806641, CBS
+layouts/layout1/layout1_5agents_7.txt, 70, 0.000720977783203125, CBS
+layouts/layout1/layout1_5agents_7.txt, 70, 0.0007078647613525391, CBS
+layouts/layout1/layout1_5agents_7.txt, 70, 0.0007081031799316406, CBS
+layouts/layout1/layout1_5agents_7.txt, 70, 0.0007860660552978516, CBS
+layouts/layout1/layout1_5agents_7.txt, 70, 1.007138967514038, CBS
+layouts/layout1/layout1_5agents_7.txt, 70, 1.0058889389038086, CBS
+layouts/layout1/layout1_5agents_7.txt, 70, 1.005829095840454, CBS
+layouts/layout1/layout1_5agents_7.txt, 70, 0.000743865966796875, CBS
+layouts/layout1/layout1_5agents_7.txt, 70, 0.0034987926483154297, Prioritized
+layouts/layout3/layout3_8agents_1.txt, 122, 0, Prioritized

@@ -159,12 +159,13 @@ class CBSSolver(object):
         #             2. If this node has no collision, return solution
         #             3. Otherwise, choose the first collision and convert to a list of constraints (using your
         #                standard_splitting function). Add a new child node to your open list for each constraint
-        #           Ensure to create a copy of any objects that your child nodes might inherit
+        #           Ensure to create a copy of any objects that your child nodes might inherit       
+        
         while len(self.open_list) > 0:
             curr = self.pop_node()
-            #print(curr)
-            if not curr['collisions']:
-                self.CPU_time = timer.time() - self.start_time
+            print(self.CPU_time)
+            if not curr['collisions']: 
+                self.CPU_time = timer.time() - self.start_time   
                 return curr['paths'], self.CPU_time
 
             constraints2 = standard_splitting(curr['collisions'][0])
