@@ -146,12 +146,12 @@ if __name__ == '__main__':
         elif args.solver == "Distributed":  # Wrapper of distributed planning solver class
             print("***Run Distributed Planning***")
             solver = DistributedPlanningSolver(my_map, starts, goals) #!!!TODO: add your own distributed planning implementation here.
-            paths, CPU = solver.find_solution()
+            paths, CPU, look_steps = solver.find_solution()
         else: 
             raise RuntimeError("Unknown solver!")
 
         cost = get_sum_of_cost(paths)
-        result_file.write("{}, {}, {}, {}\n".format(file, cost, CPU, args.solver))
+        result_file.write("{}, {}, {}, {}, {}\n".format(file, cost, CPU, args.solver, look_steps))
 
 
         if not args.batch:

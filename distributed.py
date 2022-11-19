@@ -40,7 +40,7 @@ class DistributedPlanningSolver(object):
         result = []
         self.CPU_time = timer.time() - start_time
 
-        look_steps = 7  # <------------------------------------------------------------ CHANGE LOOK FORWARD STEPS HERE
+        look_steps = 0  # <------------------------------------------------------------ CHANGE LOOK FORWARD STEPS HERE
 
         # Create agent objects with AircraftDistributed class
         agentlist = []
@@ -64,8 +64,8 @@ class DistributedPlanningSolver(object):
             print(len(number_moves))
             number_moves.append(places)
             
-            if len(number_moves) > 200:
-                return moves, 1000    
+            if len(number_moves) > 1000:
+                return moves, 'Not Solvable', look_steps    
 
             print_mapf_instance(self.my_map, places, self.goals)
             ten_loc = [d['loc'] for d in ten]
@@ -129,6 +129,7 @@ class DistributedPlanningSolver(object):
             get_sum_of_cost(result)))  # Hint: think about how cost is defined in your implementation
         print(result)
 
+        print(look_steps)
         return result, self.CPU_time, look_steps  # Hint: this should be the final result of the distributed planning (visualization is done after planning)
 
 
