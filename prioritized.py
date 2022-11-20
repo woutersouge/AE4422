@@ -18,8 +18,6 @@ class PrioritizedPlanningSolver(object):
         self.goals = goals
         self.num_of_agents = len(goals)
 
-        # self.CPU_time = 0
-
         # compute heuristics for the low-level search
         self.heuristics = []
         for goal in self.goals:
@@ -34,29 +32,19 @@ class PrioritizedPlanningSolver(object):
         result = []
         constraints = []
 
-        for i in range(self.num_of_agents):  # Find path for each agent
+        for i in range(self.num_of_agents): 
             path = a_star(self.my_map, self.starts[i], self.goals[i], self.heuristics[i],
                           i, constraints)
             if path is None:
                 return None, 'Non Solvable'
                 # raise BaseException('No solutions')
             result.append(path)
-            ##############################
-            # Task 2: Add constraints here
-            #         Useful variables:
-            #            * path contains the solution path of the current (i'th) agent, e.g., [(1,1),(1,2),(1,3)]
-            #            * self.num_of_agents has the number of total agents
-            #            * constraints: array of constraints to consider for future A* searches
-            # print(path)
 
             for j in range(len(path)):
                 for k in range(self.num_of_agents):
                     if i == k:
                         continue
                     con_loc = path[j]
-
-                    # constraints.append({'agent': k, 'loc': [con_loc], 't_step': j + 1})
-                    # constraints.append({'agent': k, 'loc': [con_loc], 't_step': j + 2})
 
                     if len(path) > longest_path:
                         longest_path = len(path)
@@ -67,12 +55,9 @@ class PrioritizedPlanningSolver(object):
 
                     if j < len(path) - 1:
                         con_loc2 = path[j + 1]
-                        # constraints.append({'agent': k, 'loc': [con_loc], 't_step': j + 2})
                         constraints.append({'agent': k, 'loc': [con_loc], 't_step': j + 1})
                         constraints.append({'agent': k, 'loc': [con_loc2], 't_step': j + 1})
                         constraints.append({'agent': k, 'loc': [con_loc, con_loc2], 't_step': j + 1})
-                        # print('1', k, con_loc, j + 1)
-                        # print('2', k, con_loc2, j + 1)
                         print('test', k, [con_loc, con_loc2], j + 1)
 
                         self.CPU_time = timer.time() - start_time

@@ -26,8 +26,6 @@ class DistributedPlanningSolver(object):
         self.num_of_agents = len(goals)
         self.heuristics = []
 
-        # T.B.D.
-
     def find_solution(self):
         """
         Finds paths for all agents from start to goal locations. 
@@ -58,10 +56,9 @@ class DistributedPlanningSolver(object):
             ten = [{} for _ in range(self.num_of_agents)]
             curr = [{} for _ in range(self.num_of_agents)]
             for j in range(self.num_of_agents):
-                #print(j)
+
                 ten[j]['loc'], ten[j]['val'], curr[j]['loc'] = agentlist[j].calc_next(curr, look_steps)
             places = [d['loc'] for d in curr]
-            # print(len(number_moves))
             number_moves.append(places)
 
             print_mapf_instance(self.my_map, places, self.goals)
@@ -82,7 +79,6 @@ class DistributedPlanningSolver(object):
                 if location in [d['loc'] for d in curr]:
                     if ten[[d['loc'] for d in curr].index(location)]['loc'] == \
                             curr[[d['loc'] for d in ten].index(location)]['loc']:
-                        # print([d['loc'] for d in curr].index(location),[d['loc'] for d in ten].index(location))
                         if [d['loc'] for d in curr].index(location) != [d['loc'] for d in ten].index(location):
                             coll = True
                             break
@@ -101,7 +97,6 @@ class DistributedPlanningSolver(object):
                     coll = False
 
                     for location in ten_loc:
-                        # print(ten_loc.count(location))
                         if ten_loc.count(location) > 1:
                             coll = True
                             break
@@ -113,8 +108,6 @@ class DistributedPlanningSolver(object):
                                     curr[[d['loc'] for d in ten].index(location)]['loc']:
 
                                 if [d['loc'] for d in curr].index(location) != [d['loc'] for d in ten].index(location):
-                                    # print([d['loc'] for d in curr].index(location),
-                                    #      [d['loc'] for d in ten].index(location))
                                     coll = True
                                     break
                     if not coll:
@@ -132,11 +125,11 @@ class DistributedPlanningSolver(object):
         print("\n Found a solution! \n")
         print("CPU time (s):    {:.2f}".format(self.CPU_time))
         print("Sum of costs:    {}".format(
-            get_sum_of_cost(result)))  # Hint: think about how cost is defined in your implementation
+            get_sum_of_cost(result)))  
         print(result)
 
         
-        return result, self.CPU_time, look_steps  # Hint: this should be the final result of the distributed planning (visualization is done after planning)
+        return result, self.CPU_time, look_steps  
 
 
 def print_mapf_instance(my_map, starts, goals):

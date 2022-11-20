@@ -28,7 +28,6 @@ class AircraftDistributed(object):
         if collision_locs is None:
             collision_locs = []
         moves = [(0, -1), (1, 0), (0, 1), (-1, 0), (0, 0)]
-        #print(look_steps)
         forward_value = 0
         old_forward = 0
         next_move = self.loc
@@ -57,11 +56,13 @@ class AircraftDistributed(object):
                 if next_move in collision_locs:
                     adjust = 1e3
                 forward_value = forward(self, possible_move, look_steps)
-                #print(self.heuristics[possible_move], forward_value,self.heuristics[next_move], old_forward)
                 if (self.heuristics[possible_move] + forward_value < self.heuristics[next_move] + old_forward + adjust) and not (
                         possible_move in collision_locs):
                     next_move = possible_move
                     old_forward = forward_value
+
+                # uncomment these lines, if you want to use randomness in distributed solver
+
                 # elif (self.heuristics[possible_move] + forward_value == self.heuristics[next_move] + old_forward + adjust) and not (
                 #        possible_move in collision_locs):
                 #    if bool(random.getrandbits(1)):

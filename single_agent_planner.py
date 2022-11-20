@@ -138,42 +138,23 @@ def a_star(my_map, start_loc, goal_loc, h_values, agent, constraints):
         constraints - constraints defining where robot should or cannot go at each timestep
     """
     constraint_table = {}
-    #print(constraint_table)
-    ##############################
-    # Task 1.1: Extend the A* search to search in the space-time domain
-    #           rather than space domain, only.
     start_time = time.time()
-    # print(constraints, type(agent))
     constraint_table, earliest_goal_timestep = build_constraint_table(constraints, agent, goal_loc)
-    # print(earliest_goal_timestep)
     open_list = []
     closed_list = dict()
     h_value = h_values[start_loc]
 
-    # print(constraint_table)
     root = {'loc': start_loc, 'g_val': 0, 'h_val': h_value, 'parent': None, 't_step': 0}
     push_node(open_list, root)
     closed_list[((root['loc']), root['t_step'])] = root
-    #print(agent)
     while len(open_list) > 0:
         curr = pop_node(open_list)
         #############################
         time_opp = timer.time()-start_time
         if time_opp > 2:
             return None
-        # Task 1.4: Adjust the goal test condition to handle goal constraints
-        # print(curr['t_step'])
-        # print(earliest_goal_timestep)
-        # print((curr['t_step']>earliest_goal_timestep))
         if (curr['loc'] == goal_loc) & (curr['t_step'] > earliest_goal_timestep):
-            # if curr['t_step'] > earliest_goal_timestep:
-            #    return None
-            # print(get_path(curr),constraint_table)
-            #print(curr, get_path(curr))
             return get_path(curr)
-        # print(curr['t_step'])
-        # if curr['t_step'] > last_timestep:
-        #    return None
 
         for dir in range(5):
             child_loc = move(curr['loc'], dir)
