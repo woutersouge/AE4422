@@ -1,4 +1,3 @@
-"""HI"""
 import sys
 
 from single_agent_planner import compute_heuristics
@@ -63,11 +62,11 @@ class AircraftDistributed(object):
                         possible_move in collision_locs):
                     next_move = possible_move
                     old_forward = forward_value
-                elif (self.heuristics[possible_move] + forward_value == self.heuristics[next_move] + old_forward + adjust) and not (
-                       possible_move in collision_locs):
-                   if bool(random.getrandbits(1)):
-                       next_move = possible_move
-                       old_forward = forward_value
+                # elif (self.heuristics[possible_move] + forward_value == self.heuristics[next_move] + old_forward + adjust) and not (
+                #        possible_move in collision_locs):
+                #    if bool(random.getrandbits(1)):
+                #        next_move = possible_move
+                #        old_forward = forward_value
 
 
             except KeyError:

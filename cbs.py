@@ -174,6 +174,8 @@ class CBSSolver(object):
             for constraint2 in constraints2:
                 self.CPU_time = timer.time() - self.start_time
                 print(self.CPU_time)
+                if self.CPU_time > 2:
+                    return None, 'Non Solvable'
                 conn = curr['constraints'][:]
                 conn.append(constraint2)
                 # print(curr['paths'])

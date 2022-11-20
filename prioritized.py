@@ -18,7 +18,7 @@ class PrioritizedPlanningSolver(object):
         self.goals = goals
         self.num_of_agents = len(goals)
 
-        self.CPU_time = 0
+        # self.CPU_time = 0
 
         # compute heuristics for the low-level search
         self.heuristics = []
@@ -29,7 +29,7 @@ class PrioritizedPlanningSolver(object):
         """ Finds paths for all agents from their start locations to their goal locations."""
 
         start_time = timer.time()
-        timeout = timer.time() + 0.001
+        timeout = timer.time() + 5
         longest_path = 50
         result = []
         constraints = []
@@ -38,7 +38,8 @@ class PrioritizedPlanningSolver(object):
             path = a_star(self.my_map, self.starts[i], self.goals[i], self.heuristics[i],
                           i, constraints)
             if path is None:
-                raise BaseException('No solutions')
+                return None, 'Non Solvable'
+                # raise BaseException('No solutions')
             result.append(path)
             ##############################
             # Task 2: Add constraints here
@@ -79,7 +80,7 @@ class PrioritizedPlanningSolver(object):
                             print(start_time)
                             print(timer.time())
                             print('No result')
-                            return None, self.CPU_time
+                            return 'Welloe', "Non Solvable"
 
             ##############################
 

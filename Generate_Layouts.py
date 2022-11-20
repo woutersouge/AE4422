@@ -1,7 +1,7 @@
 import random
 
-Agents = 8
-Num_Layouts_Per = 10
+Agents = 7
+Num_Layouts_Per = 1000
 
 layout1 = ["9 22\n",
            ". . @ @ @ @ . . . @ @ @ @ . . . @ @ @ @ . . \n",

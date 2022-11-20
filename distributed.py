@@ -40,7 +40,7 @@ class DistributedPlanningSolver(object):
         result = []
         self.CPU_time = timer.time() - start_time
 
-        look_steps = 0  # <------------------------------------------------------------ CHANGE LOOK FORWARD STEPS HERE
+        look_steps = 5  # <------------------------------------------------------------ CHANGE LOOK FORWARD STEPS HERE
 
         # Create agent objects with AircraftDistributed class
         agentlist = []
@@ -61,15 +61,15 @@ class DistributedPlanningSolver(object):
                 #print(j)
                 ten[j]['loc'], ten[j]['val'], curr[j]['loc'] = agentlist[j].calc_next(curr, look_steps)
             places = [d['loc'] for d in curr]
-            print(len(number_moves))
+            # print(len(number_moves))
             number_moves.append(places)
-            
-            if len(number_moves) > 1000:
-                return moves, 'Not Solvable', look_steps    
 
             print_mapf_instance(self.my_map, places, self.goals)
             ten_loc = [d['loc'] for d in ten]
-
+            
+            if len(number_moves) > 200:
+                return None, 'Not Solvable', look_steps   
+            
             coll = False
 
             for location in [d['loc'] for d in ten]:
@@ -86,11 +86,17 @@ class DistributedPlanningSolver(object):
                         if [d['loc'] for d in curr].index(location) != [d['loc'] for d in ten].index(location):
                             coll = True
                             break
-
+            
+            number_col = []
             while coll:
                 for k in range(self.num_of_agents):
                     ten = agentlist[k].solve_coll(curr, ten, look_steps)
                     ten_loc = [d['loc'] for d in ten]
+                    number_col.append(ten)
+                    print(len(number_col))
+                    
+                    if len(number_col) > 10000:
+                        return None, 'Not Solvable', look_steps 
 
                     coll = False
 
